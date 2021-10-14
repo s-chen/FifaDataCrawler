@@ -17,3 +17,11 @@ class FifaPlayerUrlsSpider(scrapy.Spider):
             yield {
                 'playerUrl': link + '?attr=fut'
             }
+
+        offset = response.url[51:]
+        endOffset = 19260
+
+        if int(offset) <= endOffset:
+            nextPageLink = 'https://sofifa.com/players?col=oa&sort=desc&offset=' + str(int(offset) + 60)
+            request = scrapy.Request(url=nextPageLink)
+            yield request
