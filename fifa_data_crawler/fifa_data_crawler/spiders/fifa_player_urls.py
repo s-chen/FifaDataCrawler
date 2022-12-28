@@ -12,14 +12,14 @@ class FifaPlayerUrlsSpider(scrapy.Spider):
 
     
     def parse(self, response):
-        for playerUrl in response.css('td.col-name a.tooltip::attr(href)'):
-            link = playerUrl.get()
+        players = [link for link in response.css('td.col-name a::attr(href)').extract() if "/player/" in link]
+        for player in players:
             yield {
-                'playerUrl': link + '?attr=fut'
+                'playerUrl': player + '?attr=fut'
             }
 
         offset = response.url[51:]
-        endOffset = 19260
+        endOffset = 18600
 
         if int(offset) <= endOffset:
             nextPageLink = 'https://sofifa.com/players?col=oa&sort=desc&offset=' + str(int(offset) + 60)
